@@ -5,6 +5,7 @@ import json #to make JSON requests
 import random #to select messages randomly.
 from replit import db #to use the replit db
 from discord.ext import tasks
+from serpapi import GoogleSearch
 
 
 my_secret = os.environ['Token']
@@ -103,5 +104,27 @@ async def on_message(message):
     else:
       db["responding"] = False
       await message.channel.send("Responding is OFF.")
+
+  if msg.startswith("$show"):
+    val = msg.split("$show", 1)[1]
+    params = {
+      "api_key":"API key",
+      "engine":"google",
+      "q":val,
+      "hl":"en"
+    }
+    search = GoogleSearch(params)
+    results = search.get_dict()
+    image_results = []
+
+    for image in results["images_results"]:
+      image_results.append({
+        "thumbnail": image["thumbnail"],
+        "original": image["original"]
+        })
+    
+    for j in range(1,6):
+      await message.channel.send(image_results[j])
+    await message.channel.send("Have any more questions:question:\nFeel free to ask again :smiley: !")
 
 client.run(my_secret)
