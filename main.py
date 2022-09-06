@@ -107,11 +107,14 @@ async def on_message(message):
 
   if msg.startswith("$show"):
     val = msg.split("$show", 1)[1]
+    
+    my_secret = os.environ['API key']
     params = {
-      "api_key":"API key",
-      "engine":"google",
-      "q":val,
-      "hl":"en"
+      "api_key": my_secret,
+      "engine": "google",
+      "q": val,
+      "hl": "en",
+      "tbm": "isch"
     }
     search = GoogleSearch(params)
     results = search.get_dict()
@@ -119,12 +122,11 @@ async def on_message(message):
 
     for image in results["images_results"]:
       image_results.append({
-        "thumbnail": image["thumbnail"],
         "original": image["original"]
         })
     
     for j in range(1,6):
-      await message.channel.send(image_results[j])
+      await message.channel.send(image_results[j]["original"])
     await message.channel.send("Have any more questions:question:\nFeel free to ask again :smiley: !")
 
 client.run(my_secret)
