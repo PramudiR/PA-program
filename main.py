@@ -42,11 +42,15 @@ def update_encouragements(encouraging_input):
         db["encouragements"] = [encouraging_input]
 
 
-def delete_message(index):
+def delete_message(input):
     encourage = db["encouragements"]
-    if len(encourage) > index:
-        del encourage[index]
+    if input.isdigit() == True:
+      if len(encourage) > int(input):
+        del encourage[int(input)]
         db["encouragements"] = encourage
+    else:
+      encourage.remove(input)
+      db["encouragements"] = encourage
 
 @client.event
 async def on_ready():
@@ -82,8 +86,8 @@ async def on_message(message):
     if msg.startswith("$del"):
         encourage = []
         if "encouragements" in db.keys():
-            index = int(msg.split("$del", 1)[1])
-            delete_message(index)
+            val = msg.split("$del ", 1)[1]
+            delete_message(val)
             encourage = db["encouragements"].value
         await message.channel.send(encourage)
 
