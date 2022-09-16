@@ -4,7 +4,6 @@ import requests  #to make HTTP requests
 import json  #to make JSON requests
 import random  #to select messages randomly.
 from replit import db  #to use the replit db
-from discord.ext import tasks
 from serpapi import GoogleSearch
 
 my_secret = os.environ['Token']
@@ -48,15 +47,6 @@ def delete_message(index):
     if len(encourage) > index:
         del encourage[index]
         db["encouragements"] = encourage
-
-
-status = ['Bot Playground', 'with Python']
-
-
-@tasks.loop(seconds=600)
-async def change_status():
-    await client.change_presence(activity=discord.Game(next(status)))
-
 
 @client.event
 async def on_ready():
