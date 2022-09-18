@@ -14,12 +14,16 @@ client = discord.Client(intents=intents)
 
 sad_words = [
     'sad', 'depressed', 'stressed', 'unhappy', 'angry', 'miserable',
-    'depressing', 'stressing', 'rude'
+    'depressing', 'stressing', 'rude', 'not well'
 ]
 
 encouragements = [
     "Cheer up!", "Hang in there.", "You are a great soul!",
     "Great days will come."
+]
+
+status_check =[
+  "Are you there?", "Is anyone here?", "Anyone up?"
 ]
 
 if "responding" not in db.keys():
@@ -65,6 +69,9 @@ async def on_message(message):
 
     if msg.startswith(('hello', 'hi', 'Hello', 'Hello!', 'hey')):
         await message.channel.send('Hello!')
+
+    if any(word in msg for word in status_check):
+      await message.channel.send("I am here.\nWhat can I do for you:question:")
 
     if msg.startswith('$inspire'):
         quote = get_quotes()
